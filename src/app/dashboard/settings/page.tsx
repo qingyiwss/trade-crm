@@ -45,20 +45,31 @@ export default function SettingsPage() {
     async function loadConfig() {
       try {
         const res = await fetch("/api/settings/smtp");
-        if (res.ok) {
-          const data: SmtpConfig = await res.json();
-          setConfig(data);
-          setHost(data.smtp_host || "smtp.gmail.com");
-          setPort(data.smtp_port || 587);
-          setUser(data.smtp_user || "");
-          setPassword(data.smtp_password || "");
-          setFromName(data.from_name || "Lao Wei");
-        } else {
-          addToast("error", "Failed to load SMTP configuration");
+
+        // Guard against non-JSON responses (e.g., HTML error pages)
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          const text = await res.text();
+          console.error("Non-JSON response from /api/settings/smtp:", res.status, text.slice(0, 200));
+          throw new Error(`Server returned ${res.status} ${res.statusText}`);
         }
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || `Failed to load settings (${res.status})`);
+        }
+
+        setConfig(data);
+        setHost(data.smtp_host || "smtp.gmail.com");
+        setPort(data.smtp_port || 587);
+        setUser(data.smtp_user || "");
+        setPassword(data.smtp_password || "");
+        setFromName(data.from_name || "Lao Wei");
       } catch (e) {
+        const msg = e instanceof Error ? e.message : "Failed to load SMTP configuration";
         console.error("Failed to load SMTP config:", e);
-        addToast("error", "Failed to load SMTP configuration");
+        addToast("error", msg);
       } finally {
         setLoading(false);
       }
@@ -92,6 +103,14 @@ export default function SettingsPage() {
           from_name: fromName.trim() || "Lao Wei",
         }),
       });
+
+      // Guard against non-JSON responses (e.g., HTML error pages)
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Non-JSON response from PUT /api/settings/smtp:", res.status, text.slice(0, 200));
+        throw new Error(`Server returned ${res.status} ${res.statusText}`);
+      }
 
       const data = await res.json();
 
