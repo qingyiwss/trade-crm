@@ -96,6 +96,16 @@ export async function PATCH(
     updateData.notes = body.notes;
   }
 
+  if (body.is_starred !== undefined) {
+    if (typeof body.is_starred !== "boolean") {
+      return NextResponse.json(
+        { error: "is_starred must be a boolean" },
+        { status: 400 }
+      );
+    }
+    updateData.is_starred = body.is_starred;
+  }
+
   if (Object.keys(updateData).length === 0) {
     return NextResponse.json(
       { error: "No valid fields to update" },

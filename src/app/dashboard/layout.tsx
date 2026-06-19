@@ -6,14 +6,20 @@ import {
   LayoutDashboard,
   Users,
   Send,
+  FileText,
   Settings,
+  Search,
+  Kanban,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 const NAV_ITEMS = [
   { href: "/dashboard", icon: LayoutDashboard, key: "nav.dashboard" as const },
   { href: "/dashboard/customers", icon: Users, key: "nav.customers" as const },
+  { href: "/dashboard/pipeline", icon: Kanban, key: "nav.pipeline" as const },
+  { href: "/dashboard/prospect", icon: Search, key: "nav.prospect" as const },
   { href: "/dashboard/outreach", icon: Send, key: "nav.outreach" as const },
+  { href: "/dashboard/templates", icon: FileText, key: "nav.templates" as const },
   { href: "/dashboard/settings", icon: Settings, key: "nav.settings" as const },
 ];
 

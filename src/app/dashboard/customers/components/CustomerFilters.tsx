@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback } from "react";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Star } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 const STATUS_OPTIONS = [
@@ -29,12 +29,16 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
   const [statusInput, setStatusInput] = useState(
     searchParams.get("status") || "all"
   );
+  const [starOnly, setStarOnly] = useState(
+    searchParams.get("starred") === "1"
+  );
 
   const updateQuery = useCallback(
-    (search: string, status: string) => {
+    (search: string, status: string, starred: boolean) => {
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
       if (status && status !== "all") params.set("status", status);
+      if (starred) params.set("starred", "1");
       const qs = params.toString();
       router.push(qs ? `/dashboard/customers?${qs}` : "/dashboard/customers");
     },
@@ -47,14 +51,20 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      updateQuery(searchInput, statusInput);
+      updateQuery(searchInput, statusInput, starOnly);
     }
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
     setStatusInput(newStatus);
-    updateQuery(searchInput, newStatus);
+    updateQuery(searchInput, newStatus, starOnly);
+  };
+
+  const handleStarToggle = () => {
+    const next = !starOnly;
+    setStarOnly(next);
+    updateQuery(searchInput, statusInput, next);
   };
 
   return (
@@ -84,6 +94,21 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
           </option>
         ))}
       </select>
+
+      {/* Star filter toggle */}
+      <button
+        onClick={handleStarToggle}
+        className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
+          starOnly
+            ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
+            : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-300 hover:border-slate-600"
+        }`}
+      >
+        <Star
+          className={`w-4 h-4 ${starOnly ? "fill-amber-400" : ""}`}
+        />
+        {t("pipeline.starOnly")}
+      </button>
 
       {/* Add button */}
       <button

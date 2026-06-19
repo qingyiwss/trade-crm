@@ -14,16 +14,19 @@ interface Customer {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  source: string | null;
+  is_starred: boolean;
 }
 
 export default async function CustomersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; status?: string }>;
+  searchParams: Promise<{ search?: string; status?: string; starred?: string }>;
 }) {
   const params = await searchParams;
   const search = params.search;
   const status = params.status;
+  const starred = params.starred === "1";
 
   const supabase = await createClient();
 
@@ -34,6 +37,10 @@ export default async function CustomersPage({
 
   if (status && status !== "all") {
     query = query.eq("status", status);
+  }
+
+  if (starred) {
+    query = query.eq("is_starred", true);
   }
 
   if (search) {

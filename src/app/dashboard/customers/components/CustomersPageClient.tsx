@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Star, ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
@@ -16,6 +17,8 @@ interface Customer {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  source: string | null;
+  is_starred: boolean;
 }
 
 interface CustomersPageClientProps {
@@ -41,6 +44,14 @@ const STATUS_BADGE_CLASSES: Record<string, string> = {
   closed: "bg-gray-500/10 text-gray-400 border-gray-500/20",
 };
 
+const SOURCE_BADGE_CLASSES: Record<string, string> = {
+  manual: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+  search: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  deep_mine: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  b2b: "bg-green-500/10 text-green-400 border-green-500/20",
+  linkedin: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+};
+
 function StatusBadge({ status, t }: { status: string; t: (k: string) => string }) {
   const classes = STATUS_BADGE_CLASSES[status] || STATUS_BADGE_CLASSES["new"];
   const labelKey = STATUS_BADGE_LABELS[status] || STATUS_BADGE_LABELS["new"];
@@ -49,6 +60,18 @@ function StatusBadge({ status, t }: { status: string; t: (k: string) => string }
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes}`}
     >
       {t(labelKey)}
+    </span>
+  );
+}
+
+function SourceBadge({ source }: { source: string | null }) {
+  if (!source) return <span className="text-xs text-slate-600">—</span>;
+  const classes = SOURCE_BADGE_CLASSES[source] || SOURCE_BADGE_CLASSES["manual"];
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${classes}`}
+    >
+      {source.replace("_", " ")}
     </span>
   );
 }
@@ -88,12 +111,36 @@ function formatDate(dateStr: string, t: (k: string) => string): string {
 }
 
 export default function CustomersPageClient({
-  customers,
+  customers: initialCustomers,
   error,
   search,
   status,
 }: CustomersPageClientProps) {
   const { t } = useI18n();
+  const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
+
+  const toggleStar = useCallback(async (customerId: string, currentStarred: boolean) => {
+    // Optimistic update
+    setCustomers((prev) =>
+      prev.map((c) =>
+        c.id === customerId ? { ...c, is_starred: !currentStarred } : c
+      )
+    );
+    try {
+      await fetch(`/api/customers/${customerId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_starred: !currentStarred }),
+      });
+    } catch {
+      // Revert on error
+      setCustomers((prev) =>
+        prev.map((c) =>
+          c.id === customerId ? { ...c, is_starred: currentStarred } : c
+        )
+      );
+    }
+  }, []);
 
   if (error) {
     return (
@@ -139,8 +186,14 @@ export default function CustomersPageClient({
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-700/50">
+                <th className="text-center text-xs font-medium text-slate-400 uppercase tracking-wider px-2 py-3 w-10">
+                  <span className="sr-only">Star</span>
+                </th>
                 <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-4 py-3">
                   {t("customers.company")}
+                </th>
+                <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">
+                  {t("customerDetail.source")}
                 </th>
                 <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">
                   {t("customers.country")}
@@ -162,7 +215,7 @@ export default function CustomersPageClient({
             <tbody className="divide-y divide-slate-700/30">
               {customers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center">
+                  <td colSpan={8} className="px-4 py-12 text-center">
                     <p className="text-slate-500 text-sm">
                       {t("customers.noResults")}
                     </p>
@@ -182,6 +235,21 @@ export default function CustomersPageClient({
                     key={customer.id}
                     className="hover:bg-slate-800/80 transition-colors group"
                   >
+                    <td className="px-2 py-3 text-center">
+                      <button
+                        onClick={() => toggleStar(customer.id, customer.is_starred)}
+                        className="p-1 rounded hover:bg-slate-700 transition-colors"
+                        title={customer.is_starred ? t("customerDetail.unstar") : t("customerDetail.star")}
+                      >
+                        <Star
+                          className={`w-4 h-4 ${
+                            customer.is_starred
+                              ? "text-amber-400 fill-amber-400"
+                              : "text-slate-600 hover:text-amber-400"
+                          }`}
+                        />
+                      </button>
+                    </td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/dashboard/customers/${customer.id}`}
@@ -194,6 +262,9 @@ export default function CustomersPageClient({
                           {customer.website}
                         </p>
                       )}
+                    </td>
+                    <td className="px-4 py-3 hidden sm:table-cell">
+                      <SourceBadge source={customer.source} />
                     </td>
                     <td className="px-4 py-3 hidden sm:table-cell">
                       <span className="text-sm text-slate-300">

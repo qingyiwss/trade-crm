@@ -17,7 +17,10 @@ export interface I18nDict {
   nav: {
     dashboard: string;
     customers: string;
+    pipeline: string;
     outreach: string;
+    prospect: string;
+    templates: string;
     settings: string;
   };
   common: {
@@ -39,6 +42,13 @@ export interface I18nDict {
     today: string;
     yesterday: string;
     daysAgo: string;
+    channels: {
+      email: string;
+      whatsapp: string;
+      phone: string;
+      linkedin: string;
+      instagram: string;
+    };
   };
   landing: {
     subtitle: string;
@@ -126,6 +136,63 @@ export interface I18nDict {
     fillSubjectBody: string;
     failedSend: string;
     batchSent: string;
+    contactsWithEmail: string;
+    globalTemplateConfig: string;
+    applyToAll: string;
+    selectRecipients: string;
+    selectAll: string;
+    deselectAll: string;
+    unknownContact: string;
+    templateOverride: string;
+    useGlobal: string;
+    customSubject: string;
+    customBody: string;
+    sendAll: string;
+    sendResults: string;
+    noRecipients: string;
+    loadFailed: string;
+  };
+  templates: {
+    title: string;
+    subtitle: string;
+    newTemplate: string;
+    createTemplate: string;
+    editTemplate: string;
+    templateName: string;
+    templateNamePlaceholder: string;
+    subject: string;
+    subjectPlaceholder: string;
+    body: string;
+    bodyPlaceholder: string;
+    fillAllFields: string;
+    created: string;
+    updated: string;
+    deleted: string;
+    noTemplates: string;
+    createFirst: string;
+    confirmDelete: string;
+    loadFailed: string;
+    saveFailed: string;
+    deleteFailed: string;
+  };
+  prospect: {
+    title: string;
+    newSearch: string;
+    product: string;
+    country: string;
+    search: string;
+    taskList: string;
+    status: string;
+    results: string;
+    createdAt: string;
+    refresh: string;
+    pending: string;
+    running: string;
+    completed: string;
+    failed: string;
+    deepMine: string;
+    deepMineCreated: string;
+    deepMineHint: string;
   };
   settings: {
     title: string;
@@ -163,6 +230,13 @@ export interface I18nDict {
     unknown: string;
     edit: string;
     cancelEdit: string;
+    source: string;
+    star: string;
+    unstar: string;
+    contactStage: string;
+    emailThread: string;
+    inbound: string;
+    outbound: string;
   };
   editCustomer: {
     title: string;
@@ -201,6 +275,19 @@ export interface I18nDict {
     cancel: string;
     failed: string;
   };
+  pipeline: {
+    title: string;
+    new: string;
+    sent: string;
+    replied: string;
+    negotiating: string;
+    won: string;
+    lost: string;
+    changeStage: string;
+    lastContacted: string;
+    noContacts: string;
+    starOnly: string;
+  };
   newCustomer: {
     title: string;
     backToCustomers: string;
@@ -223,7 +310,10 @@ export const zh: I18nDict = {
   nav: {
     dashboard: "仪表盘",
     customers: "客户",
+    pipeline: "管线",
     outreach: "邮件",
+    prospect: "客户挖掘",
+    templates: "模板",
     settings: "设置",
   },
   common: {
@@ -245,6 +335,13 @@ export const zh: I18nDict = {
     today: "今天",
     yesterday: "昨天",
     daysAgo: "天前",
+    channels: {
+      email: "邮件",
+      whatsapp: "WhatsApp",
+      phone: "电话",
+      linkedin: "LinkedIn",
+      instagram: "Instagram",
+    },
   },
   landing: {
     subtitle: "管理您的贸易客户，跟踪营销进度，一站式成交更多订单。",
@@ -332,6 +429,63 @@ export const zh: I18nDict = {
     fillSubjectBody: "发送前请填写主题和正文",
     failedSend: "邮件发送失败",
     batchSent: "批量发送完成！成功 {success}，失败 {fail}，共 {total} 个客户。",
+    contactsWithEmail: "个联系人",
+    globalTemplateConfig: "全局模板配置",
+    applyToAll: "应用到所有已选收件人",
+    selectRecipients: "选择收件人",
+    selectAll: "全选",
+    deselectAll: "取消全选",
+    unknownContact: "未命名联系人",
+    templateOverride: "模板覆盖",
+    useGlobal: "使用全局模板",
+    customSubject: "自定义主题...",
+    customBody: "自定义正文...",
+    sendAll: "发送全部",
+    sendResults: "发送结果",
+    noRecipients: "请先选择收件人",
+    loadFailed: "加载数据失败",
+  },
+  templates: {
+    title: "邮件模板",
+    subtitle: "管理邮件模板",
+    newTemplate: "新建模板",
+    createTemplate: "创建模板",
+    editTemplate: "编辑模板",
+    templateName: "模板名称",
+    templateNamePlaceholder: "输入模板名称...",
+    subject: "主题",
+    subjectPlaceholder: "输入邮件主题...",
+    body: "正文",
+    bodyPlaceholder: "输入邮件正文...",
+    fillAllFields: "请填写所有字段",
+    created: "模板创建成功！",
+    updated: "模板更新成功！",
+    deleted: "模板已删除",
+    noTemplates: "暂无模板",
+    createFirst: "创建第一个模板",
+    confirmDelete: "确定要删除此模板吗？",
+    loadFailed: "加载模板失败",
+    saveFailed: "保存模板失败",
+    deleteFailed: "删除模板失败",
+  },
+  prospect: {
+    title: "客户挖掘",
+    newSearch: "新建搜索",
+    product: "产品",
+    country: "国家",
+    search: "搜索",
+    taskList: "任务列表",
+    status: "状态",
+    results: "结果",
+    createdAt: "创建时间",
+    refresh: "刷新",
+    pending: "待处理",
+    running: "运行中",
+    completed: "已完成",
+    failed: "失败",
+    deepMine: "深度挖掘",
+    deepMineCreated: "深度挖掘已创建",
+    deepMineHint: "此功能将深度搜索潜在客户信息",
   },
   settings: {
     title: "设置",
@@ -369,6 +523,13 @@ export const zh: I18nDict = {
     unknown: "未知",
     edit: "编辑",
     cancelEdit: "取消编辑",
+    source: "来源",
+    star: "收藏",
+    unstar: "取消收藏",
+    contactStage: "联系人阶段",
+    emailThread: "邮件往来",
+    inbound: "收件",
+    outbound: "发件",
   },
   editCustomer: {
     title: "编辑客户",
@@ -407,6 +568,19 @@ export const zh: I18nDict = {
     cancel: "取消",
     failed: "记录营销失败",
   },
+  pipeline: {
+    title: "销售管线",
+    new: "未联系",
+    sent: "已发信",
+    replied: "已回复",
+    negotiating: "洽谈中",
+    won: "已成交",
+    lost: "已放弃",
+    changeStage: "变更阶段",
+    lastContacted: "最近联系",
+    noContacts: "暂无联系人",
+    starOnly: "只看星标",
+  },
   newCustomer: {
     title: "添加客户",
     backToCustomers: "返回客户列表",
@@ -429,7 +603,10 @@ export const en: I18nDict = {
   nav: {
     dashboard: "Dashboard",
     customers: "Customers",
+    pipeline: "Pipeline",
     outreach: "Outreach",
+    prospect: "Prospect",
+    templates: "Templates",
     settings: "Settings",
   },
   common: {
@@ -451,6 +628,13 @@ export const en: I18nDict = {
     today: "Today",
     yesterday: "Yesterday",
     daysAgo: "d ago",
+    channels: {
+      email: "Email",
+      whatsapp: "WhatsApp",
+      phone: "Phone",
+      linkedin: "LinkedIn",
+      instagram: "Instagram",
+    },
   },
   landing: {
     subtitle:
@@ -540,6 +724,63 @@ export const en: I18nDict = {
     failedSend: "Failed to send email",
     batchSent:
       "Batch sent! {success} succeeded, {fail} failed out of {total} customers.",
+    contactsWithEmail: "contacts",
+    globalTemplateConfig: "Global Template Config",
+    applyToAll: "Apply to all selected",
+    selectRecipients: "Select Recipients",
+    selectAll: "Select All",
+    deselectAll: "Deselect All",
+    unknownContact: "Unnamed Contact",
+    templateOverride: "Template Override",
+    useGlobal: "Use global template",
+    customSubject: "Custom subject...",
+    customBody: "Custom body...",
+    sendAll: "Send All",
+    sendResults: "Send Results",
+    noRecipients: "Please select recipients first",
+    loadFailed: "Failed to load data",
+  },
+  templates: {
+    title: "Email Templates",
+    subtitle: "Manage email templates",
+    newTemplate: "New Template",
+    createTemplate: "Create Template",
+    editTemplate: "Edit Template",
+    templateName: "Template Name",
+    templateNamePlaceholder: "Enter template name...",
+    subject: "Subject",
+    subjectPlaceholder: "Enter email subject...",
+    body: "Body",
+    bodyPlaceholder: "Enter email body...",
+    fillAllFields: "Please fill in all fields",
+    created: "Template created successfully!",
+    updated: "Template updated successfully!",
+    deleted: "Template deleted",
+    noTemplates: "No templates yet",
+    createFirst: "Create your first template",
+    confirmDelete: "Are you sure you want to delete this template?",
+    loadFailed: "Failed to load templates",
+    saveFailed: "Failed to save template",
+    deleteFailed: "Failed to delete template",
+  },
+  prospect: {
+    title: "Prospect",
+    newSearch: "New Search",
+    product: "Product",
+    country: "Country",
+    search: "Search",
+    taskList: "Task List",
+    status: "Status",
+    results: "Results",
+    createdAt: "Created At",
+    refresh: "Refresh",
+    pending: "Pending",
+    running: "Running",
+    completed: "Completed",
+    failed: "Failed",
+    deepMine: "Deep Mine",
+    deepMineCreated: "Deep mine created",
+    deepMineHint: "Deep search for potential customer information",
   },
   settings: {
     title: "Settings",
@@ -580,6 +821,13 @@ export const en: I18nDict = {
     unknown: "Unknown",
     edit: "Edit",
     cancelEdit: "Cancel Edit",
+    source: "Source",
+    star: "Star",
+    unstar: "Unstar",
+    contactStage: "Contact Stage",
+    emailThread: "Email Thread",
+    inbound: "Inbound",
+    outbound: "Outbound",
   },
   editCustomer: {
     title: "Edit Customer",
@@ -617,6 +865,19 @@ export const en: I18nDict = {
     saving: "Saving...",
     cancel: "Cancel",
     failed: "Failed to log outreach",
+  },
+  pipeline: {
+    title: "Pipeline",
+    new: "New",
+    sent: "Sent",
+    replied: "Replied",
+    negotiating: "Negotiating",
+    won: "Won",
+    lost: "Lost",
+    changeStage: "Change Stage",
+    lastContacted: "Last Contacted",
+    noContacts: "No contacts",
+    starOnly: "Starred only",
   },
   newCustomer: {
     title: "Add Customer",
