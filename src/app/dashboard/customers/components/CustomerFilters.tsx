@@ -3,14 +3,15 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback } from "react";
 import { Search, Plus } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 const STATUS_OPTIONS = [
-  { value: "all", label: "All Status" },
-  { value: "new", label: "New" },
-  { value: "contacted", label: "Contacted" },
-  { value: "replied", label: "Replied" },
-  { value: "negotiating", label: "Negotiating" },
-  { value: "closed", label: "Closed" },
+  { value: "all", key: "customers.statusAll" as const },
+  { value: "new", key: "customers.statusNew" as const },
+  { value: "contacted", key: "customers.statusContacted" as const },
+  { value: "replied", key: "customers.statusReplied" as const },
+  { value: "negotiating", key: "customers.statusNegotiating" as const },
+  { value: "closed", key: "customers.statusClosed" as const },
 ];
 
 interface CustomerFiltersProps {
@@ -20,9 +21,14 @@ interface CustomerFiltersProps {
 export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useI18n();
 
-  const [searchInput, setSearchInput] = useState(searchParams.get("search") || "");
-  const [statusInput, setStatusInput] = useState(searchParams.get("status") || "all");
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("search") || ""
+  );
+  const [statusInput, setStatusInput] = useState(
+    searchParams.get("status") || "all"
+  );
 
   const updateQuery = useCallback(
     (search: string, status: string) => {
@@ -58,7 +64,7 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
         <input
           type="text"
-          placeholder="Search companies..."
+          placeholder={t("customers.searchPlaceholder")}
           value={searchInput}
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
@@ -74,7 +80,7 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
       >
         {STATUS_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
-            {opt.label}
+            {t(opt.key)}
           </option>
         ))}
       </select>
@@ -85,7 +91,7 @@ export default function CustomerFilters({ onAddClick }: CustomerFiltersProps) {
         className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
       >
         <Plus className="w-4 h-4" />
-        Add Customer
+        {t("customers.addCustomer")}
       </button>
     </div>
   );

@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { TrendingUp, Users, Sparkles, ArrowRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export default function LandingPage() {
+  const { t } = useI18n();
+
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col">
       {/* Main hero section */}
@@ -19,8 +24,7 @@ export default function LandingPage() {
 
           {/* Subtitle */}
           <p className="text-lg text-slate-400 max-w-md mx-auto mb-10">
-            Manage your trade customers, track outreach, and close more deals —
-            all in one place.
+            {t("landing.subtitle")}
           </p>
 
           {/* CTA Button */}
@@ -28,7 +32,7 @@ export default function LandingPage() {
             href="/dashboard"
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition-colors text-base shadow-lg shadow-blue-600/20"
           >
-            Enter Dashboard
+            {t("landing.enterDashboard")}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -42,10 +46,10 @@ export default function LandingPage() {
               <Users className="w-5 h-5 text-blue-400" />
             </div>
             <h3 className="text-sm font-semibold text-white mb-1">
-              Customer Management
+              {t("landing.featureCustomerMgmt")}
             </h3>
             <p className="text-xs text-slate-500">
-              Organize and track all your trade contacts.
+              {t("landing.featureCustomerDesc")}
             </p>
           </div>
           <div className="text-center">
@@ -53,10 +57,10 @@ export default function LandingPage() {
               <Sparkles className="w-5 h-5 text-yellow-400" />
             </div>
             <h3 className="text-sm font-semibold text-white mb-1">
-              Smart Outreach
+              {t("landing.featureOutreach")}
             </h3>
             <p className="text-xs text-slate-500">
-              Automated messaging and follow-ups.
+              {t("landing.featureOutreachDesc")}
             </p>
           </div>
           <div className="text-center">
@@ -64,10 +68,10 @@ export default function LandingPage() {
               <TrendingUp className="w-5 h-5 text-green-400" />
             </div>
             <h3 className="text-sm font-semibold text-white mb-1">
-              Deal Tracking
+              {t("landing.featureDeals")}
             </h3>
             <p className="text-xs text-slate-500">
-              Monitor progress from lead to close.
+              {t("landing.featureDealsDesc")}
             </p>
           </div>
         </div>

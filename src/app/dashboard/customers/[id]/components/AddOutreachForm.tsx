@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 interface AddOutreachFormProps {
   customerId: string;
@@ -11,6 +12,7 @@ interface AddOutreachFormProps {
 const CHANNELS = ["email", "whatsapp", "linkedin", "phone", "instagram", "other"];
 
 export default function AddOutreachForm({ customerId, onSaved }: AddOutreachFormProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [channel, setChannel] = useState("email");
   const [subject, setSubject] = useState("");
@@ -39,7 +41,7 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Failed to log outreach");
+        throw new Error(data.error || t("addOutreach.failed"));
       }
 
       setSubject("");
@@ -49,7 +51,7 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
       setOpen(false);
       onSaved();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Failed to log outreach");
+      setError(e instanceof Error ? e.message : t("addOutreach.failed"));
     } finally {
       setSaving(false);
     }
@@ -62,7 +64,7 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
         className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-sm text-white rounded-lg transition-colors"
       >
         <Plus className="w-4 h-4" />
-        Log Outreach
+        {t("addOutreach.log")}
       </button>
     );
   }
@@ -70,7 +72,9 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
   return (
     <div className="bg-slate-800/70 border border-slate-700/50 rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-white">Log Outreach</h3>
+        <h3 className="text-base font-semibold text-white">
+          {t("addOutreach.title")}
+        </h3>
         <button
           onClick={() => setOpen(false)}
           className="p-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded transition-colors"
@@ -90,7 +94,7 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
           {/* Channel */}
           <div>
             <label className="block text-xs font-medium text-slate-400 mb-1">
-              Channel *
+              {t("addOutreach.channel")} *
             </label>
             <select
               value={channel}
@@ -108,7 +112,7 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
           {/* Status */}
           <div>
             <label className="block text-xs font-medium text-slate-400 mb-1">
-              Status
+              {t("addOutreach.status")}
             </label>
             <input
               type="text"
@@ -123,28 +127,28 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
         {/* Subject */}
         <div>
           <label className="block text-xs font-medium text-slate-400 mb-1">
-            Subject
+            {t("addOutreach.subject")}
           </label>
           <input
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20"
-            placeholder="Outreach subject..."
+            placeholder={t("addOutreach.subject")}
           />
         </div>
 
         {/* Content */}
         <div>
           <label className="block text-xs font-medium text-slate-400 mb-1">
-            Content
+            {t("addOutreach.content")}
           </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={3}
             className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 resize-y"
-            placeholder="What was communicated..."
+            placeholder={t("addOutreach.content")}
           />
         </div>
 
@@ -154,14 +158,14 @@ export default function AddOutreachForm({ customerId, onSaved }: AddOutreachForm
             disabled={saving}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {saving ? "Saving..." : "Log Outreach"}
+            {saving ? t("addOutreach.saving") : t("addOutreach.log")}
           </button>
           <button
             type="button"
             onClick={() => setOpen(false)}
             className="px-4 py-2 text-sm text-slate-400 hover:text-slate-300 transition-colors"
           >
-            Cancel
+            {t("addOutreach.cancel")}
           </button>
         </div>
       </form>

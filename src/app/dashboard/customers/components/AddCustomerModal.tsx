@@ -3,14 +3,19 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 interface AddCustomerModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export default function AddCustomerModal({ open, onClose }: AddCustomerModalProps) {
+export default function AddCustomerModal({
+  open,
+  onClose,
+}: AddCustomerModalProps) {
   const router = useRouter();
+  const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -31,7 +36,7 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!formData.company_name.trim()) {
-        setError("Company name is required.");
+        setError(t("addCustomer.companyNameRequired"));
         return;
       }
 
@@ -53,19 +58,19 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
         if (!res.ok) {
           const err = await res.json();
-          setError(err.error || "Failed to create customer.");
+          setError(err.error || t("addCustomer.failed"));
           return;
         }
 
         onClose();
         router.refresh();
       } catch {
-        setError("Network error. Please try again.");
+        setError(t("addCustomer.networkError"));
       } finally {
         setSubmitting(false);
       }
     },
-    [formData, onClose, router]
+    [formData, onClose, router, t]
   );
 
   if (!open) return null;
@@ -81,7 +86,9 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
       {/* Modal */}
       <div className="relative bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Add Customer</h2>
+          <h2 className="text-lg font-semibold text-white">
+            {t("addCustomer.title")}
+          </h2>
           <button
             onClick={onClose}
             className="p-1 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-700"
@@ -99,7 +106,8 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Company Name <span className="text-red-400">*</span>
+              {t("addCustomer.companyName")}{" "}
+              <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -114,7 +122,7 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Country
+              {t("addCustomer.country")}
             </label>
             <input
               type="text"
@@ -128,7 +136,7 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Website
+              {t("addCustomer.website")}
             </label>
             <input
               type="text"
@@ -142,7 +150,7 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Category
+              {t("addCustomer.category")}
             </label>
             <input
               type="text"
@@ -156,7 +164,7 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Notes
+              {t("addCustomer.notes")}
             </label>
             <textarea
               name="notes"
@@ -174,14 +182,14 @@ export default function AddCustomerModal({ open, onClose }: AddCustomerModalProp
               onClick={onClose}
               className="flex-1 px-4 py-2 text-sm font-medium text-slate-300 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
             >
-              Cancel
+              {t("addCustomer.cancel")}
             </button>
             <button
               type="submit"
               disabled={submitting}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
             >
-              {submitting ? "Creating..." : "Create Customer"}
+              {submitting ? t("addCustomer.creating") : t("addCustomer.create")}
             </button>
           </div>
         </form>
